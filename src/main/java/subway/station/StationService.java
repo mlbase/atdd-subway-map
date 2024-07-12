@@ -1,7 +1,10 @@
-package subway;
+package subway.station;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import subway.commons.ErrorCode;
+import subway.commons.HttpException;
+import subway.section.SectionCreateDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +24,7 @@ public class StationService {
         return createStationResponse(station);
     }
 
-    public StationResponse findStation(Long id) throws HttpException{
+    public StationResponse findStation(Long id) {
         Station station = stationRepository.findById(id).orElseThrow(() -> new HttpException(ErrorCode.BAD_REQUEST));
         return createStationResponse(station);
     }
@@ -35,6 +38,14 @@ public class StationService {
     @Transactional
     public void deleteStationById(Long id) {
         stationRepository.deleteById(id);
+    }
+
+    public void validateSectionCreate(SectionCreateDTO dto) {
+        Station upStation = stationRepository.findById(dto.getUpStationId())
+                .orElseThrow(() -> new HttpException(ErrorCode.UP_STATION_NOT_VALID));
+
+        Station downStation = stationRepository.findById(dto.getDownStationId())
+                .orElseThrow(() -> new HttpException(ErrorCode.DOWN_STATION_NOT_VALID, dto.getDownStationId().toString()));
     }
 
     private StationResponse createStationResponse(Station station) {

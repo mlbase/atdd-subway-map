@@ -1,8 +1,8 @@
-package subway;
+package subway.line;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import subway.commons.HttpException;
 
 import java.net.URI;
 import java.util.List;
@@ -17,19 +17,19 @@ public class LineController {
     }
 
     @PostMapping("/lines")
-    public ResponseEntity<LineResponse> createLine(@RequestBody LineCreateRequest lineCreateRequest) throws HttpException {
+    public ResponseEntity<LineResponse> createLine(@RequestBody LineCreateRequest lineCreateRequest) {
         LineResponse lineResponse = lineFacade.createLine(lineCreateRequest);
         return ResponseEntity.created(URI.create("/lines/"+ lineResponse.getId())).body(lineResponse);
     }
 
     @GetMapping("/lines")
-    public ResponseEntity<List<LineResponse>> readLines() throws HttpException{
+    public ResponseEntity<List<LineResponse>> readLines() {
         List<LineResponse> lineResponses = lineFacade.readLines();
         return ResponseEntity.ok().body(lineResponses);
     }
 
     @GetMapping("/lines/{id}")
-    public ResponseEntity<LineResponse> readLine(@PathVariable Long id) throws HttpException {
+    public ResponseEntity<LineResponse> readLine(@PathVariable Long id) {
         LineResponse lineResponse = lineFacade.readLine(id);
         return ResponseEntity.ok().body(lineResponse);
     }
@@ -43,7 +43,7 @@ public class LineController {
     }
 
     @DeleteMapping("/lines/{id}")
-    public ResponseEntity<?> deleteLine(@PathVariable Long id) throws HttpException {
+    public ResponseEntity<?> deleteLine(@PathVariable Long id) {
         lineFacade.deleteLine(id);
         return ResponseEntity.noContent().build();
     }

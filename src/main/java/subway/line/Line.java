@@ -1,6 +1,12 @@
-package subway;
+package subway.line;
+
+import subway.commons.ErrorCode;
+import subway.commons.HttpException;
+import subway.section.Section;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Line {
@@ -22,6 +28,9 @@ public class Line {
 
     @Column(nullable = false)
     private Long distance;
+
+    @Embedded
+    private Sections sections;
 
     public Line() {
     }
@@ -108,5 +117,13 @@ public class Line {
 
     public void changeColor(String color) {
         this.color = color;
+    }
+
+    public void addSection(Section section) {
+        sections.addSection(section);
+    }
+
+    public void deleteSection(Long stationId) {
+        sections.deleteSection(stationId);
     }
 }
